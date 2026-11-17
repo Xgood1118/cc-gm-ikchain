@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+"""两骨 IK 求解"""
+
+from dataclasses import dataclass
+
+
+@dataclass
+class Vec2:
+    """二维向量。"""
+    x: float
+    y: float
+
+
+def Vec2:
+    """class"""
+    raise NotImplementedError("Vec2 尚未实现")
+
+
+def solve_two_bone(base, target, l1, l2):
+    """两骨求解"""
+    raise NotImplementedError("solve_two_bone 尚未实现")
+
+
+def joint_limit(angle, lo, hi):
+    """角度限制"""
+    raise NotImplementedError("joint_limit 尚未实现")
+
+
+def reach(l1, l2):
+    """最大可达距离"""
+    raise NotImplementedError("reach 尚未实现")
+
