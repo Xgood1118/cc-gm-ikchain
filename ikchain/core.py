@@ -11,11 +11,6 @@ class Vec2:
     y: float
 
 
-def Vec2:
-    """class"""
-    raise NotImplementedError("Vec2 尚未实现")
-
-
 def solve_two_bone(base, target, l1, l2):
     """两骨求解"""
     raise NotImplementedError("solve_two_bone 尚未实现")
