@@ -308,3 +308,46 @@ def test_cli_end_to_end(tmp_path):
     assert data[0]["status"] == "ok" and data[0]["error"] < 1e-9
     assert data[1]["status"] == "max_reach"
     assert data[1]["lengths"] == [3.0, 4.0]
+
+
+# ===== v2 契约测试：初始全部失败，实现后必须通过 =====
+import ikchain as broadphase_ik  # noqa: E402
+
+
+def test_chain_keeps_bone_lengths():
+    import math
+    r = broadphase_ik.solve_chain((0.0, 0.0), (2.0, 1.0), [1.0, 1.0, 1.0])
+    js = r["joints"]
+    for a, b in zip(js, js[1:]):
+        seg = math.hypot(b[0] - a[0], b[1] - a[1])
+        assert abs(seg - 1.0) < 1e-6
+
+
+def test_chain_endpoint_error_within_tol():
+    r = broadphase_ik.solve_chain((0.0, 0.0), (2.0, 0.5), [1.2, 1.2, 1.2], tol=0.02)
+    assert r["end_error"] <= 0.02
+    assert r["iterations"] >= 1
+
+
+def test_chain_infeasible_reported():
+    r = broadphase_ik.solve_chain((0.0, 0.0), (10.0, 0.0), [1.0, 1.0, 1.0])
+    assert r.get("infeasible") is True
+    assert r.get("reason")
+
+
+def test_frozen_joints_listed():
+    limits = [(None, None), (-0.2, 0.2), (None, None)]
+    r = broadphase_ik.solve_chain((0.0, 0.0), (0.0, 2.5), [1.0, 1.0, 1.0], limits=limits, tol=0.05)
+    assert "frozen" in r
+    assert isinstance(r["frozen"], list)
+
+
+def test_avoid_circle_not_entered():
+    import math
+    r = broadphase_ik.solve_chain((0.0, 0.0), (2.0, 0.0), [1.0, 1.0, 1.0],
+                                  avoid=((1.0, 0.0), 0.3))
+    if r.get("infeasible"):
+        assert r.get("reason")
+    else:
+        for p in r["joints"]:
+            assert math.hypot(p[0] - 1.0, p[1] - 0.0) >= 0.3 - 1e-9

@@ -293,3 +293,11 @@ def solve_two_bone(base, target, l1, l2, bend=1.0, limit=None):
         "max_extend_position": extend_pos,
         "bend": sgn,
     }
+
+
+def solve_chain(base, target, lengths, limits=None, tol=0.01, avoid=None, max_iter=64):
+    """多骨链求解：返回 dict(joints, end_error, iterations, frozen)。
+
+    frozen 为被限位冻结的关节下标列表；不可行时返回 dict(infeasible=True, reason=...)。
+    """
+    raise NotImplementedError("solve_chain 尚未实现")
