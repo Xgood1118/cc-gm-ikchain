@@ -18,6 +18,8 @@ def test_solve_keeps_length():
 
 
 # ===== v2 契约测试：初始全部失败，实现后必须通过 =====
+import ikchain  # noqa: E402
+
 
 
 def test_chain_keeps_lengths_and_converges():
